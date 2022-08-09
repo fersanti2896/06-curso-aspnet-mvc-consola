@@ -4,4 +4,4 @@ using AplicacionConsola;
 Console.WriteLine("Hello, World!");
 
 var _insercionPedido = new InsercionPedido();
-_insercionPedido.llenado(1000);
+_insercionPedido.llenado(2000);

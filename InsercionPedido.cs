@@ -9,6 +9,7 @@ namespace AplicacionConsola {
     public class InsercionPedido {
         public void llenado(int cantidad) {
             var numEstadosPedido = cantidadEstadosPedidos();
+            var numProducto = cantidadProductos();
             var numEstadoRepublica = 32;
 
             for (var i = 0; i < cantidad; i++) {
@@ -20,6 +21,15 @@ namespace AplicacionConsola {
                     };
 
                     modelo.Pedidos.Add(_Pedido);
+                    modelo.SaveChanges();
+
+                    var detallePedido = new DetallePedido {
+                        Cantidad = numeroPseudoAleatorio(10),
+                        CatProductoId = numeroPseudoAleatorio(numProducto),
+                        PedidoId = _Pedido.PedidoId
+                    };
+
+                    modelo.DetallePedidos.Add(detallePedido);
                     modelo.SaveChanges();
                 }
             }
@@ -39,6 +49,16 @@ namespace AplicacionConsola {
             cantidad = (cantidad % maximo) + 1;
 
             return Convert.ToInt32(cantidad);
+        }
+
+        private int cantidadProductos() {
+            int cantidad = 0;
+
+            using (var modelo = new PedidosDBContext()) {
+                cantidad = modelo.CatProductos.Count();
+            }
+
+            return cantidad;
         }
     }
 }

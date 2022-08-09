@@ -18,7 +18,9 @@ namespace AplicacionConsola.Models
 
         public virtual DbSet<CatEstadoPedido> CatEstadoPedidos { get; set; } = null!;
         public virtual DbSet<CatEstadoRepublica> CatEstadoRepublicas { get; set; } = null!;
+        public virtual DbSet<CatProducto> CatProductos { get; set; } = null!;
         public virtual DbSet<CatRegion> CatRegions { get; set; } = null!;
+        public virtual DbSet<DetallePedido> DetallePedidos { get; set; } = null!;
         public virtual DbSet<Pedido> Pedidos { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -60,6 +62,15 @@ namespace AplicacionConsola.Models
                     .HasForeignKey(d => d.CatRegionId);
             });
 
+            modelBuilder.Entity<CatProducto>(entity =>
+            {
+                entity.ToTable("CatProducto");
+
+                entity.Property(e => e.Concepto)
+                    .HasMaxLength(33)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<CatRegion>(entity =>
             {
                 entity.ToTable("CatRegion");
@@ -67,6 +78,23 @@ namespace AplicacionConsola.Models
                 entity.Property(e => e.NombreRegion)
                     .HasMaxLength(22)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<DetallePedido>(entity =>
+            {
+                entity.ToTable("DetallePedido");
+
+                entity.HasIndex(e => e.CatProductoId, "IX_DetallePedido_CatProductoId");
+
+                entity.HasIndex(e => e.PedidoId, "IX_DetallePedido_PedidoId");
+
+                entity.HasOne(d => d.CatProducto)
+                    .WithMany(p => p.DetallePedidos)
+                    .HasForeignKey(d => d.CatProductoId);
+
+                entity.HasOne(d => d.Pedido)
+                    .WithMany(p => p.DetallePedidos)
+                    .HasForeignKey(d => d.PedidoId);
             });
 
             modelBuilder.Entity<Pedido>(entity =>
