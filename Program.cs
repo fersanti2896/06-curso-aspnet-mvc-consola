@@ -3,5 +3,8 @@ using AplicacionConsola;
 
 Console.WriteLine("Hello, World!");
 
-var _insercionPedido = new InsercionPedido();
-_insercionPedido.llenado(2000);
+var insercionUsuarios = new InsercionUsuarios();
+insercionUsuarios.llenado(500);
+
+var insercionPedido = new InsercionPedido();
+insercionPedido.llenado(500, 40);

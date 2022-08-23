@@ -8,6 +8,7 @@ namespace AplicacionConsola.Models
         public CatEstadoRepublica()
         {
             Pedidos = new HashSet<Pedido>();
+            Usuarios = new HashSet<Usuario>();
         }
 
         public int CatEstadoRepublicaId { get; set; }
@@ -17,5 +18,6 @@ namespace AplicacionConsola.Models
 
         public virtual CatRegion CatRegion { get; set; } = null!;
         public virtual ICollection<Pedido> Pedidos { get; set; }
+        public virtual ICollection<Usuario> Usuarios { get; set; }
     }
 }

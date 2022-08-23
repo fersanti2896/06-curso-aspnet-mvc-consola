@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AplicacionConsola {
     public class InsercionPedido {
-        public void llenado(int cantidad) {
+        public void llenado(int cantidad, int userId) {
             var numEstadosPedido = cantidadEstadosPedidos();
             var numProducto = cantidadProductos();
             var numEstadoRepublica = 32;
@@ -15,17 +15,18 @@ namespace AplicacionConsola {
             for (var i = 0; i < cantidad; i++) {
                 using (var modelo = new PedidosDBContext()) {
                     var _Pedido = new Pedido {
-                        CatEstadoPedidoId = numeroPseudoAleatorio(numEstadosPedido),
-                        CatEstadoRepublicaId = numeroPseudoAleatorio(numEstadoRepublica),
-                        FechaPedido = DateTime.Now
+                        CatEstadoPedidoId    = Utilerias.numeroPseudoAleatorio(numEstadosPedido),
+                        CatEstadoRepublicaId = Utilerias.numeroPseudoAleatorio(numEstadoRepublica),
+                        FechaPedido          = DateTime.Now, 
+                        UsuarioId            = userId
                     };
 
                     modelo.Pedidos.Add(_Pedido);
                     modelo.SaveChanges();
 
                     var detallePedido = new DetallePedido {
-                        Cantidad = numeroPseudoAleatorio(10),
-                        CatProductoId = numeroPseudoAleatorio(numProducto),
+                        Cantidad = Utilerias.numeroPseudoAleatorio(10),
+                        CatProductoId = Utilerias.numeroPseudoAleatorio(numProducto),
                         PedidoId = _Pedido.PedidoId
                     };
 
@@ -42,13 +43,6 @@ namespace AplicacionConsola {
             }
 
             return cantidad;
-        }
-
-        private int numeroPseudoAleatorio(int maximo) {
-            dynamic cantidad = DateTime.Now.Ticks;
-            cantidad = (cantidad % maximo) + 1;
-
-            return Convert.ToInt32(cantidad);
         }
 
         private int cantidadProductos() {
